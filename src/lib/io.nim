@@ -24,33 +24,39 @@ proc readRaw*(file: string): string =
 
 iterator readLines*(files: seq[string]): string =
   if files.len < 1 or files[0] == "-":
-    while true:
-      yield readline(stdin).replace("\r","").replace(re"\n$","")
+    var line: string
+    while stdin.readline(line):
+      yield line.replace("\r","").replace(re"\n$","")
   else:
     let f = open(files[0], FileMode.fmRead)
     defer: f.close()
-    while true:
-      yield f.readline().replace("\r","").replace(re"\n$","")
+    var line: string
+    while f.readline(line):
+      yield line.replace("\r","").replace(re"\n$","")
 
 iterator readLines*(file: string): string =
   let f = open(file, FileMode.fmRead)
   defer: f.close()
-  while true:
-    yield f.readline().replace("\r","").replace(re"\n$","")
+  var line: string
+  while f.readline(line):
+    yield line.replace("\r","").replace(re"\n$","")
 
 iterator readLinesRaw*(files: seq[string]): string =
   if files.len < 1 or files[0] == "-":
-    while true:
-      yield readline(stdin)
+    var line: string
+    while stdin.readline(line):
+      yield line.replace("\r","").replace(re"\n$","")
   else:
     let f = open(files[0], FileMode.fmRead)
     defer: f.close()
-    while true:
-      yield f.readline()
+    var line: string
+    while f.readline(line):
+      yield line.replace("\r","").replace(re"\n$","")
 
 iterator readLinesRaw*(file: string): string =
   let f = open(file, FileMode.fmRead)
   defer: f.close()
-  while true:
-    yield f.readline()
+  var line: string
+  while f.readline(line):
+    yield line.replace("\r","").replace(re"\n$","")
 
