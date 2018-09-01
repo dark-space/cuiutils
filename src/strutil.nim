@@ -7,6 +7,8 @@ import subcmd/newline
 import subcmd/randomize
 import subcmd/replace
 import subcmd/unique
+import subcmd/line
+import subcmd/column
 
 proc usage() =
   let s = """
@@ -19,6 +21,8 @@ Usage: strutil <COMMAND> [OPTIONS]... [FILE]
   randomize  : randomize lines.
   replace    : ordinary replace method.
   unique     : unique lines with original order.
+  line       : select lines.
+  column     : select columns.
 """
   stdout.writeline(s)
 
@@ -32,6 +36,8 @@ proc run(cmd: string) =
   elif cmd == "randomize"  :randomize  (os.commandLineParams()[1..os.commandLineParams().len-1])
   elif cmd == "replace"    :replace    (os.commandLineParams()[1..os.commandLineParams().len-1])
   elif cmd == "unique"     :unique     (os.commandLineParams()[1..os.commandLineParams().len-1])
+  elif cmd == "line"       :line       (os.commandLineParams()[1..os.commandLineParams().len-1])
+  elif cmd == "column"     :column     (os.commandLineParams()[1..os.commandLineParams().len-1])
 
 if paramCount() == 0:
   usage()
