@@ -1,7 +1,7 @@
 import strutils, parseopt, nre
 import ../lib/io
 
-proc startswith*(tmpArgs: openArray[string]): seq[string] =
+proc startswith*(tmpArgs: openArray[string]) =
   proc usage() =
     let s = """
   Usage: startswith [OPTION]... QUERY [FILE]
@@ -34,7 +34,7 @@ proc startswith*(tmpArgs: openArray[string]): seq[string] =
       usage()
       quit(1)
 
-  var out_lines: seq[string] = @[]
+  var matchN = 0
   var query = args[0]; args.delete(0)
   if ignore_case:
     query = query.toLowerAscii
@@ -48,6 +48,8 @@ proc startswith*(tmpArgs: openArray[string]): seq[string] =
       l = l.replace(re"^\s+","")
     if not l.startswith(query):
       continue
-    out_lines.add(orig_line)
-  return out_lines
+    echo orig_line
+    matchN += 1
+  if matchN == 0:
+    quit(1)
 

@@ -1,7 +1,7 @@
 import strutils, parseopt, nre
 import ../lib/io
 
-proc newline*(tmpArgs: openArray[string]): string =
+proc newline*(tmpArgs: openArray[string]) =
   proc usage() =
     let s = """
   Usage: newline [OPTION]... [FILE]
@@ -48,5 +48,5 @@ proc newline*(tmpArgs: openArray[string]): string =
   if subst != nil:
     subst = subst.replace(re"([^\\])\\n", "\1\n")
     str = str.replace("\n",subst)
-  return str.replace("\r","\\r")
+  echo str.replace("\r","\\r")
 

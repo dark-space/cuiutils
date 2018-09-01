@@ -1,7 +1,7 @@
 import strutils, tables, parseopt, sets, nre
 import ../lib/table, ../lib/io
 
-proc transpose*(tmpArray: openArray[string]): seq[string] =
+proc transpose*(tmpArray: openArray[string]) =
   proc usage() =
     let s = """
   Usage: transpose [OPTION]... [FILE]
@@ -37,7 +37,6 @@ proc transpose*(tmpArray: openArray[string]): seq[string] =
       usage()
       quit(1)
 
-  var out_lines: seq[string] = @[]
   let lines = readAllFromFileOrStdin(args)
   let data = getMatrix(lines, delimiter, regex)
   if regex:
@@ -47,6 +46,5 @@ proc transpose*(tmpArray: openArray[string]): seq[string] =
     for x in 0..<data.len:
       str &= data[x][y]
       str &= delimiter
-    out_lines.add(str[0..str.len-delimiter.len-1])
-  return out_lines
+    echo str[0..str.len-delimiter.len-1]
 

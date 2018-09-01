@@ -1,7 +1,7 @@
 import strutils, parseopt, nre
 import ../lib/io
 
-proc replace*(tmpArgs: openArray[string]): seq[string] =
+proc replace*(tmpArgs: openArray[string]) =
   proc usage() =
     let s = """
   Usage: replace [OPTION]... <before> <after> [FILE]
@@ -33,7 +33,6 @@ proc replace*(tmpArgs: openArray[string]): seq[string] =
       usage()
       quit(1)
 
-  var out_lines: seq[string] = @[]
   var before = args[0]; args.delete(0)
   var after  = args[0]; args.delete(0)
 
@@ -55,6 +54,5 @@ proc replace*(tmpArgs: openArray[string]): seq[string] =
       while p >= 0:
         l = l[0 .. p+before.len-1] & after & l[p+before.len .. l.len-1]
         p = l.rfind(before, p)
-    out_lines.add(l)
-  return out_lines
+    echo l
 

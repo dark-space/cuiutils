@@ -1,7 +1,7 @@
 import strutils, sets, tables, parseopt, nre, algorithm
 import ../lib/io
 
-proc unique*(tmpArgs: openArray[string]): seq[string] =
+proc unique*(tmpArgs: openArray[string]) =
   proc usage() =
     let s = """
   Usage: line [OPTION]... [FILE]
@@ -35,13 +35,12 @@ proc unique*(tmpArgs: openArray[string]): seq[string] =
     for i in 1 .. skipN:
       result = result.replace(re"^\s*\S+\s+", "")
 
-  var out_lines: seq[string] = @[]
   var already = initSet[string]()
   if forward:
     for line in readLinesFromFileOrStdin(args):
       let compare = skipFields(line)
       if not already.contains(compare):
-        out_lines.add(line)
+        echo line
         already.incl(compare)
   else:
     var out_lines: seq[string] = @[]
@@ -51,6 +50,5 @@ proc unique*(tmpArgs: openArray[string]): seq[string] =
         out_lines.add(line)
         already.incl(compare)
     for line in out_lines.reversed:
-      out_lines.add(line)
-  return out_lines
+      echo line
 

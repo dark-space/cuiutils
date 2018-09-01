@@ -1,7 +1,7 @@
 import strutils, parseopt, nre, random, future
 import ../lib/io
 
-proc randomize*(tmpArgs: openArray[string]): seq[string] =
+proc randomize*(tmpArgs: openArray[string]) =
   proc usage() =
     let s = """
   Usage: randomize [OPTION]... [FILE]
@@ -26,7 +26,6 @@ proc randomize*(tmpArgs: openArray[string]): seq[string] =
       usage()
       quit(1)
 
-  var out_lines: seq[string] = @[]
   randomize()
   let lines = readAllFromFileOrStdin(args)
   var list = lc[x | (x <- 0 ..< lines.len), int]
@@ -35,16 +34,15 @@ proc randomize*(tmpArgs: openArray[string]): seq[string] =
     var counter = 0
     for i in countdown(lines.len-1, 1):
       let x = random.rand(i)
-      out_lines.add(lines[list[x]])
+      echo lines[list[x]]
       counter += 1
       if counter >= requireN:
-        return out_lines
+        quit(0)
       list[x] = list[i]
   else:
     for i in countdown(lines.len-1, 1):
       let x = random.rand(i)
-      out_lines.add(lines[list[x]])
+      echo lines[list[x]]
       list[x] = list[i]
-    out_lines.add(lines[list[0]])
-  return out_lines
+    echo lines[list[0]]
 

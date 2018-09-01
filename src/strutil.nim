@@ -1,45 +1,41 @@
 import strutils, nre, os
-import subcmd/startswith, subcmd/endswith
+import subcmd/de
+import subcmd/startswith
+import subcmd/endswith
+import subcmd/transpose
+import subcmd/newline
+import subcmd/randomize
+import subcmd/replace
+import subcmd/unique
 
 proc usage() =
   let s = """
-Usage: strutil [OPTION]... PATTERN [FILE]
-  -n      : repeat N times.
-  -r      : remain first N islands."""
-  echo s
-
-proc checkInputLines(args: openArray[string]): bool =
-  if args.len < 1 or args[0] == "-":
-    let str = stdin.readAll
-    let newline = str.find("\n")
-    if newline == -1:
-      return true
-    return str[newline+1 .. str.len-1].contains(re"^\s*$")
-  else:
-    let f = open(args[0], FileMode.fmRead)
-    defer: f.close()
-    let str = f.readAll
-    let newline = str.find("\n")
-    if newline == -1:
-      return true
-    return str[newline+1 .. str.len-1].contains(re"^\s*$")
+Usage: strutil <COMMAND> [OPTIONS]... [FILE]
+  de         : delete leading one word for each line.
+  startswith : filter lines such as startwith given string.
+  endswith   : filter lines such as endwith given string.
+  transpose  : transposed text from table.
+  newline    : editor for \n.
+  randomize  : randomize lines.
+  replace    : ordinary replace method.
+  unique     : unique lines with original order.
+"""
+  stdout.writeline(s)
 
 proc run(cmd: string) =
-  var remainArgs = os.commandLineParams()[1..os.commandLineParams().len-1]
-  if cmd == "startswith":
-    if startswith(remainArgs).len > 0: quit(0)
-    else: quit(1)
-  if cmd == "endswith":
-    if endswith(remainArgs).len > 0: quit(0)
-    else: quit(1)
+  if cmd == "-h" or cmd == "--help": usage(); quit(0)
+  elif cmd == "de"         :de         (os.commandLineParams()[1..os.commandLineParams().len-1])
+  elif cmd == "startswith" :startswith (os.commandLineParams()[1..os.commandLineParams().len-1])
+  elif cmd == "endswith"   :endswith   (os.commandLineParams()[1..os.commandLineParams().len-1])
+  elif cmd == "transpose"  :transpose  (os.commandLineParams()[1..os.commandLineParams().len-1])
+  elif cmd == "newline"    :newline    (os.commandLineParams()[1..os.commandLineParams().len-1])
+  elif cmd == "randomize"  :randomize  (os.commandLineParams()[1..os.commandLineParams().len-1])
+  elif cmd == "replace"    :replace    (os.commandLineParams()[1..os.commandLineParams().len-1])
+  elif cmd == "unique"     :unique     (os.commandLineParams()[1..os.commandLineParams().len-1])
 
 if paramCount() == 0:
   usage()
   quit(0)
-
-#if not checkInputLines(os.commandLineParams()[1..os.commandLineParams().len-1]):
-  #stderr.writeline("[Error] Multiple lines.")
-  #quit(1)
 
 run(os.commandLineParams()[0])
 

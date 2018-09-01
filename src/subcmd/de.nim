@@ -1,7 +1,7 @@
 import strutils, parseopt, nre
 import ../lib/io
 
-proc de*(tmpArgs: openArray[string]): seq[string] =
+proc de*(tmpArgs: openArray[string]) =
   proc usage() =
     let s = """
   Usage: de [OPTION]... PATTERN [FILE]
@@ -26,19 +26,18 @@ proc de*(tmpArgs: openArray[string]): seq[string] =
       usage()
       quit(1)
 
-  var out_lines: seq[string] = @[]
   if repeatN >= 0:
     for line in readLinesFromFileOrStdin(args):
       var l = line
       for i in 1 .. repeatN:
         l = l.replace(re"^\s*\S+\s*", "")
       l = l.replace(re"^\s+","").replace(re"\s+$","")
-      out_lines.add(l)
+      echo l
   else:
     for line in readLinesFromFileOrStdin(args):
       var l = line
       for i in 1 .. -repeatN:
         l = l.replace(re"\s*\S+\s*$", "")
       l = l.replace(re"^\s+","").replace(re"\s+$","")
-      out_lines.add(l)
+      echo l
 
