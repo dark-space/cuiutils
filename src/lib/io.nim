@@ -1,38 +1,28 @@
 import strutils, nre
 
-proc read*(files: seq[string]): string =
-  if files.len < 1 or files[0] == "-":
-    return readAll(stdin).replace("\r","").replace(re"\n$","")
+proc readAll*(file: string): seq[string] =
+  let f = open(file, FileMode.fmRead)
+  defer: f.close()
+  return f.readAll().replace("\r","").replace(re"\n$","").split("\n")
+proc readAllFromStdin*(): seq[string] =
+  return stdin.readAll().replace("\r","").replace(re"\n$","").split("\n")
+proc readAllFromFileOrStdin*(args: seq[string]): seq[string] =
+  if args.len < 1 or args[0] == "-":
+    return readAllFromStdin()
   else:
-    let f = open(files[0], FileMode.fmRead)
-    defer: f.close()
-    return f.readAll().replace("\r","").replace(re"\n$","")
+    return readAll(args[0])
 
-proc read*(file: string): string =
-  return read(@[file])
-
-proc readRaw*(files: seq[string]): string =
-  if files.len < 1 or files[0] == "-":
-    return readAll(stdin)
+proc readRawAll*(file: string): string =
+  let f = open(file, FileMode.fmRead)
+  defer: f.close()
+  return f.readAll()
+proc readRawAllFromStdin*(): string =
+  return stdin.readAll()
+proc readRawAllFromFileOrStdin*(args: seq[string]): string =
+  if args.len < 1 or args[0] == "-":
+    return readRawAllFromStdin()
   else:
-    let f = open(files[0], FileMode.fmRead)
-    defer: f.close()
-    return f.readAll()
-
-proc readRaw*(file: string): string =
-  return readRaw(@[file])
-
-iterator readLines*(files: seq[string]): string =
-  if files.len < 1 or files[0] == "-":
-    var line: string
-    while stdin.readline(line):
-      yield line.replace("\r","").replace(re"\n$","")
-  else:
-    let f = open(files[0], FileMode.fmRead)
-    defer: f.close()
-    var line: string
-    while f.readline(line):
-      yield line.replace("\r","").replace(re"\n$","")
+    return readRawAll(args[0])
 
 iterator readLines*(file: string): string =
   let f = open(file, FileMode.fmRead)
@@ -40,23 +30,33 @@ iterator readLines*(file: string): string =
   var line: string
   while f.readline(line):
     yield line.replace("\r","").replace(re"\n$","")
-
-iterator readLinesRaw*(files: seq[string]): string =
-  if files.len < 1 or files[0] == "-":
-    var line: string
-    while stdin.readline(line):
-      yield line.replace("\r","").replace(re"\n$","")
+iterator readLinesFromStdin*(): string =
+  var line: string
+  while stdin.readline(line):
+    yield line.replace("\r","").replace(re"\n$","")
+iterator readLinesFromFileOrStdin*(args: seq[string]): string =
+  if args.len < 1 or args[0] == "-":
+    for line in readLinesFromStdin():
+      yield line
   else:
-    let f = open(files[0], FileMode.fmRead)
-    defer: f.close()
-    var line: string
-    while f.readline(line):
-      yield line.replace("\r","").replace(re"\n$","")
+    for line in readLines(args[0]):
+      yield line
 
-iterator readLinesRaw*(file: string): string =
+iterator readRawLines*(file: string): string =
   let f = open(file, FileMode.fmRead)
   defer: f.close()
   var line: string
   while f.readline(line):
     yield line.replace("\r","").replace(re"\n$","")
+iterator readRawLinesFromStdin*(): string =
+  var line: string
+  while stdin.readline(line):
+    yield line.replace("\r","").replace(re"\n$","")
+iterator readRawLinesFromFileOrStdin*(args: seq[string]): string =
+  if args.len < 1 or args[0] == "-":
+    for line in readRawLinesFromStdin():
+      yield line
+  else:
+    for line in readRawLines(args[0]):
+      yield line
 

@@ -28,14 +28,14 @@ proc de*(tmpArgs: openArray[string]): seq[string] =
 
   var out_lines: seq[string] = @[]
   if repeatN >= 0:
-    for line in readLines(args):
+    for line in readLinesFromFileOrStdin(args):
       var l = line
       for i in 1 .. repeatN:
         l = l.replace(re"^\s*\S+\s*", "")
       l = l.replace(re"^\s+","").replace(re"\s+$","")
       echo l
   else:
-    for line in readLines(args):
+    for line in readLinesFromFileOrStdin(args):
       var l = line
       for i in 1 .. -repeatN:
         l = l.replace(re"\s*\S+\s*$", "")

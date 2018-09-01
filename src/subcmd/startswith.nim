@@ -38,7 +38,7 @@ proc startswith*(tmpArgs: openArray[string]): seq[string] =
   var query = args[0]; args.delete(0)
   if ignore_case:
     query = query.toLower
-  for orig_line in readLines(args):
+  for orig_line in readLinesFromFileOrStdin(args):
     var l = orig_line
     if ignore_case:
       l = l.toLower
