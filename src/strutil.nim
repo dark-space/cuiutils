@@ -1,5 +1,5 @@
 import strutils, nre, os
-import subcmd/de, subcmd/startswith
+import subcmd/startswith, subcmd/endswith
 
 proc usage() =
   let s = """
@@ -28,6 +28,9 @@ proc run(cmd: string) =
   var remainArgs = os.commandLineParams()[1..os.commandLineParams().len-1]
   if cmd == "startswith":
     if startswith(remainArgs).len > 0: quit(0)
+    else: quit(1)
+  if cmd == "endswith":
+    if endswith(remainArgs).len > 0: quit(0)
     else: quit(1)
 
 if paramCount() == 0:

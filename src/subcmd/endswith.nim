@@ -1,10 +1,10 @@
 import strutils, parseopt, nre
 import ../lib/io
 
-proc startswith*(tmpArgs: openArray[string]): seq[string] =
+proc endswith*(tmpArgs: openArray[string]): seq[string] =
   proc usage() =
     let s = """
-  Usage: startswith [OPTION]... QUERY [FILE]
+  Usage: endswith [OPTION]... QUERY [FILE]
     -i      : ignore case.
     -m      : remove coloring.
     -s      : remove leading spaces."""
@@ -46,7 +46,7 @@ proc startswith*(tmpArgs: openArray[string]): seq[string] =
       l = l.replace(re"\[\d+m","")
     if remove_space:
       l = l.replace(re"^\s+","")
-    if not l.startswith(query):
+    if not l.endswith(query):
       continue
     out_lines.add(orig_line)
   return out_lines

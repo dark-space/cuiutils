@@ -33,12 +33,12 @@ proc de*(tmpArgs: openArray[string]): seq[string] =
       for i in 1 .. repeatN:
         l = l.replace(re"^\s*\S+\s*", "")
       l = l.replace(re"^\s+","").replace(re"\s+$","")
-      echo l
+      out_lines.add(l)
   else:
     for line in readLinesFromFileOrStdin(args):
       var l = line
       for i in 1 .. -repeatN:
         l = l.replace(re"\s*\S+\s*$", "")
       l = l.replace(re"^\s+","").replace(re"\s+$","")
-      echo l
+      out_lines.add(l)
 
